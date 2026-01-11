@@ -1,0 +1,93 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agent-economy"
+version = "0.1.0"
+description = "An autonomous agent economy for task execution and coordination"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [
+    { name = "Research Team" }
+]
+keywords = ["agents", "economy", "llm", "autonomous", "marketplace"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    # Core
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    
+    # API & Networking
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "websockets>=12.0",
+    "httpx>=0.26.0",
+    
+    # Database
+    "aiosqlite>=0.19.0",
+    
+    # LLM Integration
+    "litellm>=1.20.0",
+    
+    # CLI & Display
+    "rich>=13.7.0",
+    "typer>=0.9.0",
+    
+    # Utilities
+    "python-ulid>=2.2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.1.0",
+    "mypy>=1.8.0",
+]
+analysis = [
+    "pandas>=2.1.0",
+    "matplotlib>=3.8.0",
+    "seaborn>=0.13.0",
+]
+web = [
+    "jinja2>=3.1.0",
+]
+all = [
+    "agent-economy[dev,analysis,web]",
+]
+
+[project.scripts]
+agent-economy = "economy.cli:app"
+economy-server = "economy.network.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["economy"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = "-v"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_ignores = true
+disallow_untyped_defs = true
